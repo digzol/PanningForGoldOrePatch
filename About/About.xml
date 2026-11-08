@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ModMetaData>
+  <name>Panning For Gold Ore Patch</name>
+  <modVersion>1.0.0</modVersion>
+  <author>Digzol</author>
+  <packageId>Digzol.PanningForGoldOrePatch</packageId>
+  <description>Patches Alpha Skills to have the panning expertise spawn gold ore from Medieval Overhaul instead of processed gold bars.</description>
+  <supportedVersions>
+    <li>1.7</li>
+  </supportedVersions>
+  <modDependencies>
+		<li>
+			<packageId>brrainz.harmony</packageId>
+			<displayName>Harmony</displayName>
+			<downloadUrl>https://github.com/pardeike/HarmonyRimWorld/releases/latest</downloadUrl>
+			<steamWorkshopUrl>https://steamcommunity.com/workshop/filedetails/?id=2009463077</steamWorkshopUrl>
+		</li>
+    <li>
+      <packageId>DankPyon.Medieval.Overhaul</packageId>
+      <displayName>Medieval Overhaul</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/3219596926</steamWorkshopUrl>
+    </li>
+    <li>
+      <packageId>sarg.alphaskills</packageId>
+      <displayName>Alpha Skills</displayName>
+      <steamWorkshopUrl>steam://url/CommunityFilePage/3448953006</steamWorkshopUrl>
+    </li>
+  </modDependencies>
+  <loadAfter>
+    <li>DankPyon.Medieval.Overhaul</li>
+    <li>sarg.alphaskills</li>
+  </loadAfter>
+</ModMetaData>
