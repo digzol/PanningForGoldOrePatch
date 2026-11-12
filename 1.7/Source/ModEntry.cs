@@ -6,23 +6,34 @@ using Verse;
 
 namespace PanningForGoldOrePatch
 {
-    internal class ModEntry: Mod
+    [StaticConstructorOnStartup]
+    public static class ModEntry
     {
-        public ModEntry(ModContentPack pack): base(pack)
+        public static readonly ThingDef? s_goldOreDef;
+
+        static ModEntry()
         {
-            var harmony = new Harmony(nameof(ModEntry));
-            PanningForGoldOre_AlphaSkills_ExtraYields_Patch_Patch.Apply(harmony);
+            s_goldOreDef = DefDatabase<ThingDef>.GetNamed("DankPyon_GoldOre");
+
+            if (s_goldOreDef != null)
+            {
+                var harmony = new Harmony(nameof(ModEntry));
+                PanningForGoldOre_AlphaSkills_ExtraYields_Patch_Patch.Apply(harmony);
+            }
+            else
+            {
+                Log.Message($"[{(nameof(ModEntry))}] Expected DankPyon_GoldOre to be loaded but it was not found. The patch won't be applied.");
+            }
         }
 
         public class PanningForGoldOre_AlphaSkills_ExtraYields_Patch_Patch
         {
-            private static readonly FieldInfo s_VanillaGold = AccessTools.Field(typeof(ThingDefOf), nameof(ThingDefOf.Gold));
-            private static readonly MethodInfo s_GetGoldOre = AccessTools.Method(typeof(PanningForOre_AlphaSkills_ExtraYields_Patch_Patch), nameof(GetGoldOre));
-            private static ThingDef? s_GoldOreDef;
+            private static readonly FieldInfo s_vanillaGold = AccessTools.Field(typeof(ThingDefOf), nameof(ThingDefOf.Gold));
+            private static readonly FieldInfo s_goldOre = AccessTools.Field(typeof(ModEntry), nameof(s_goldOreDef));
 
             public static void Apply(Harmony harmony)
             {
-                Log.Message($"[Panning For Ore Patch] Patching Alpha Skill's ExtraYields patch...");
+                Log.Message($"[{(nameof(ModEntry))}] Patching Alpha Skill's ExtraYields patch...");
                 harmony.Patch(
                     original: AccessTools.Method(typeof(AlphaSkills_Mineable_TrySpawnYield_Patch),
                                                  nameof(AlphaSkills_Mineable_TrySpawnYield_Patch.ExtraYields),
@@ -31,32 +42,23 @@ namespace PanningForGoldOrePatch
                 );
             }
 
-            public static ThingDef GetGoldOre()
-            {
-                return s_GoldOreDef ??= DefDatabase<ThingDef>.GetNamed("DankPyon_GoldOre");
-            }
-
-            public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            public static IEnumerable<CodeInstruction> ExtraYields_Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 int replaced = 0;
-                foreach(var ins in instructions)
+                foreach (var ins in instructions)
                 {
-                    if (ins.LoadsField(s_VanillaGold))
+                    if (ins.LoadsField(s_vanillaGold))
                     {
-                        var call = new CodeInstruction(System.Reflection.Emit.OpCodes.Call, s_GetGoldOre);
-                        call.labels.AddRange(ins.labels);
-                        call.blocks.AddRange(ins.blocks);
+                        ins.operand = s_goldOre;
                         replaced++;
-                        yield return call;
-                        continue;
                     }
                     yield return ins;
                 }
 
                 if (replaced != 1)
-                    Log.Warning($"[Panning For Ore Patch] Expected to replace 1 ThingDefOf.Gold, replaced {replaced} instead.");
+                    Log.Warning($"[{(nameof(ModEntry))}] Expected to replace 1 ThingDefOf.Gold, replaced {replaced} instead.");
                 else
-                    Log.Message($"[Panning For Ore Patch] Successfully replaced 1 instance of ThingDefOf.Gold.");
+                    Log.Message($"[{(nameof(ModEntry))}] Successfully replaced 1 instance of ThingDefOf.Gold.");
             }
         }
     }
