@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ModMetaData>
   <name>Panning For Gold Ore Patch</name>
-  <modVersion>1.0.0</modVersion>
+  <modVersion>1.0.1</modVersion>
   <author>Digzol</author>
   <packageId>Digzol.PanningForGoldOrePatch</packageId>
   <description>Patches Alpha Skills to have the panning expertise spawn gold ore from Medieval Overhaul instead of processed gold bars.</description>
