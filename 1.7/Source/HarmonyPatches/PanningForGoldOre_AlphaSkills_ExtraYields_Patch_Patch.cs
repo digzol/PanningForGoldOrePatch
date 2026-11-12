@@ -4,12 +4,12 @@ using RimWorld;
 using System.Reflection;
 using Verse;
 
-namespace PanningForOrePatch.HarmonyPatches
+namespace PanningForGoldOrePatch.HarmonyPatches
 {
     [HarmonyPatch(typeof(AlphaSkills_Mineable_TrySpawnYield_Patch))]
     [HarmonyPatch("ExtraYields")]
     [HarmonyPatch(new Type[] { typeof(Map), typeof(bool), typeof(Pawn), typeof(Mineable) })]
-    public class PanningForOre_AlphaSkills_ExtraYields_Patch_Patch
+    public class PanningForGoldOre_AlphaSkills_ExtraYields_Patch_Patch
     {
         private static readonly FieldInfo s_VanillaGold = AccessTools.Field(typeof(ThingDefOf), nameof(ThingDefOf.Gold));
         private static readonly MethodInfo s_GetGoldOre = AccessTools.Method(typeof(PanningForOre_AlphaSkills_ExtraYields_Patch_Patch), nameof(GetGoldOre));
